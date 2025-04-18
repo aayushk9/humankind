@@ -1,0 +1,18 @@
+TODOs
+
+1. Backend
+  
+  - /dailylog: log where people share small, beautiful moments to restore humanity such as shared coffee over zoom with an old friend (here
+               you can see list of available logs and an option to post your log) [GET, POST]
+  
+  - /gratitude-board: user can leave anonymous kind notes or stories for others to read. (you can see list of boards and option to post their 
+                      gratitude)     [GET, POST]
+
+  - /selfnote: send message to your future self and set reflection date to see it later [POST]
+
+  - /human-archive: short clips, notes, drawings and letters from people around the world about love, loss, hope, joy and existence. 
+                    (you can see the list of available clips, etc here and option to post yours) [GET, POST]
+                
+  - /knowledge: anyone can add their knowledge links here (user can see list of it here) [GET, POST]
+
+  -/be-sweet: a sweet message for anyone visiting this endpoint [GET]
