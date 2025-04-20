@@ -1,23 +1,24 @@
-import { authOptions } from "@/auth";
-import { prisma } from "@/lib/primsa";
-import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
-import { z } from 'zod'
+import { prisma } from "@/lib/primsa"
+import { getServerSession } from "next-auth"
+import { NextRequest, NextResponse } from "next/server"
+import { authOptions } from "@/auth"
+import { z } from "zod"
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
-        const dailyLogs = await prisma.dailyLog.findMany({
+        const knowledge = await prisma.knowledge.findMany({
             select: {
-                dailyLogs: true
+                link: true
             }
-        });
+        })
 
         return NextResponse.json({
-            message: "logs got rendered",
-            dailyLogs: dailyLogs
+            knowledge: knowledge
+        }, {
+            status: 200
         })
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return NextResponse.json({
             message: "some internal error occured"
         }, {
@@ -27,41 +28,41 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-
     try {
-
         const body = await request.json();
-        const dailyLogs = body.dailyLogs
+        const link = body.link;
+
+        const linkSchema = z.string().url();
+
+        const validation = linkSchema.safeParse(link);
         const session = await getServerSession(authOptions);
 
-        if (!session?.user.id || !session) {
+        if (!session || !session?.user.id) {
             return NextResponse.json({
-                message: 'unauthorized'
+                message: "unauthorized"
             }, {
                 status: 401
             })
         }
 
-        const logSchema = z.string().min(4);
-        const validation = logSchema.safeParse(dailyLogs);
-
         if (!validation.success) {
             return NextResponse.json({
-                message: "enter atleast 4 words to your log"
+                message: "Enter  a valid URL"
             }, {
                 status: 400 // bad request
             })
         }
 
-        await prisma.dailyLog.create({
+        // save data in db
+        await prisma.knowledge.create({
             data: {
                 userId: session?.user.id,
-                dailyLogs: dailyLogs
+                link: link
             }
         })
 
         return NextResponse.json({
-            message: "log successfully shared"
+            message: "knowledge link (resource) added successfully"
         }, {
             status: 200
         })

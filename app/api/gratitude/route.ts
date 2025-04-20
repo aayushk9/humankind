@@ -5,78 +5,82 @@ import { NextRequest, NextResponse } from "next/server"
 import { authOptions } from "@/auth"
 import { z } from 'zod'
 
-const gratitudeSchema = z.object({
-    whom: z.string().min(2),
-    story: z.string().min(10)
-})
-
 export async function GET() {
     // find available gratitude posts
     try {
-        const gratitudePosts = await prisma.gratitudeBoard.findMany({
+        const post = await prisma.gratitudeBoard.findMany({
             select: {
-                whom: true,
                 story: true
             }
         }) // render all posts
         return NextResponse.json({
-            gratitudePosts: gratitudePosts
-        }, 
-        { 
-            status: 200 
-        }
-      )
+            post: post
+        },
+            {
+                status: 200
+            }
+        )
     } catch (error) {
         console.log(error);
         return NextResponse.json({
-            message: "error while fetching new"
+            message: "error while fetching posts"
         }, {
             status: 500
-    })
+        })
     }
 }
 
 export async function POST(req: NextRequest) {
-   const body = await req.json();
-   const whom = body.whom;
-   const story = body.story;
+    try {
+        const body = await req.json();
+        const newPost = body.newPost;
 
-   const validation = gratitudeSchema.safeParse({
-       whom,
-       story
-   })
+        const gratitudeSchema = z.object({
+            newPost: z.string().min(10)
+        })
 
-   // check if user is already in a session in order to post something
-   const session = await getServerSession(authOptions); 
+        const validation = gratitudeSchema.safeParse({
+            newPost
+        })
 
-   if(!session || !session?.user.id) {
-    return NextResponse.json({
-        message: "unauthorized"
-    }, {
-        status: 401 
-    })
-   }
+        // check if user is already in a session in order to post something
+        const session = await getServerSession(authOptions);
 
-   if(!validation.success) {
-      return NextResponse.json({
-        message: "please enter valid data from your side"
-      }, {
-        status: 400 // bad request
-      })
-   }
+        if (!session || !session?.user.id) {
+            return NextResponse.json({
+                message: "unauthorized"
+            }, {
+                status: 401
+            })
+        }
 
-   /// save data to db
-   await prisma.gratitudeBoard.create({
-    data: {
-        userId: session.user.id,  
-        whom: whom,
-        story: story
+        if (!validation.success) {
+            return NextResponse.json({
+                message: "please enter valid data from your side"
+            }, {
+                status: 400 // bad request
+            })
+        }
+
+        /// save data to db
+        await prisma.gratitudeBoard.create({
+            data: {
+                userId: session.user.id,
+                story: newPost
+            }
+        })
+
+        return NextResponse.json({
+            message: "post successfull"
+        }, {
+            status: 200
+        })
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({
+            message: "some internal error occured"
+        }, {
+            status: 500
+        })
     }
-   })
-
-   return NextResponse.json({
-    message: "post successfull"
-   }, {
-    status: 200
-   })
-}
+}   
