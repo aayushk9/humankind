@@ -47,7 +47,7 @@ export default async function () {
               <h2 className="text-xl font-bold text-white">HumanKind</h2>
             </div>
             <div className="flex gap-8 text-white/60">
-              <Link href="/dailylog" className="hover:text-rose-400 transition-colors">
+              <Link href="/logs" className="hover:text-rose-400 transition-colors">
                 Daily Logs
               </Link>
               <Link href="/gratitude" className="hover:text-rose-400 transition-colors">
