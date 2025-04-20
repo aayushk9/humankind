@@ -19,7 +19,7 @@ export function Log() {
 
   const fetchLogs = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/dailylog")
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}/dailylog`)
       const data = await res.json()
 
       if (res.ok) {

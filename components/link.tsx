@@ -24,7 +24,7 @@ export function LinkComponent() {
   const fetchResources = async () => {
     try {
       setLoading(true)
-      const res = await fetch("http://localhost:3000/api/knowledge")
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}/knowledge`)
       const data = await res.json()
 
       if (res.ok) {
