@@ -5,8 +5,8 @@ import { prisma } from './lib/primsa'
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.clientID || "",
-      clientSecret: process.env.clientSecret || ""
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     })
   ],
 
