@@ -9,10 +9,6 @@ export default async function Home() {
 
   const session = await getServerSession();
 
-  if(session) {
-   redirect("/logs")
-  } 
-
   return (
     <div className="min-h-screen bg-black text-white">
     <header className="container mx-auto py-6 px-4 flex justify-between items-center">
