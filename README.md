@@ -45,11 +45,13 @@ So I thought of creating a nice app that spreads positivity, nurtures human conn
    ```
    git clone https://github.com/yourusername/humankind.git
    cd humankind
+   
    ```
 
 2. Install dependencies:
    ```
    npm install
+
    ```
 
 3. Set up environment variables:
@@ -57,11 +59,11 @@ So I thought of creating a nice app that spreads positivity, nurtures human conn
    ```
    GOOGLE_CLIENT_ID = "your google_client_id"
    GOOGLE_CLIENT_SECRET = "your google_client_secret"
-   NEXT_PUBLIC_API = http://localhost:3000/api (after deployment replace it with your deployed link)
-   DATABASE_URL= "your postgresql connection string
+   NEXT_PUBLIC_API = "http://localhost:3000/api" (after deployment replace it with your deployed link)
+   DATABASE_URL= "your postgresql connection string"
    NEXTAUTH_SECRET = "generate random string"
    ```
-   
+
 4. Set up the database:
    ```
    npm i prisma
